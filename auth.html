@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register | QuickPrint</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // 🔥 APNA FIREBASE CONFIG YAHAN PASTE KAREIN
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // --- SIGNUP LOGIC ---
+        window.handleSignup = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                alert("Account Created! Now Login.");
+            } catch (error) {
+                alert(error.message);
+            }
+        };
+
+        // --- LOGIN LOGIC ---
+        window.handleLogin = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.location.href = "dashboard.html"; // Login ke baad dashboard par bhej do
+            } catch (error) {
+                alert("Login Failed: " + error.message);
+            }
+        };
+    </script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border">
+        <h2 class="text-2xl font-bold text-center text-blue-600 mb-6 uppercase">QuickPrint Login</h2>
+        
+        <div class="space-y-4">
+            <input type="email" id="email" placeholder="Email Address" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="password" id="pass" placeholder="Password" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+            
+            <button onclick="handleLogin()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition">LOGIN</button>
+            <button onclick="handleSignup()" class="w-full bg-gray-200 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-300 transition">CREATE ACCOUNT</button>
+        </div>
+        
+        <p class="text-[10px] text-gray-400 mt-6 text-center italic font-semibold">Security powered by Firebase Cloud</p>
+    </div>
+</body>
+</html>
